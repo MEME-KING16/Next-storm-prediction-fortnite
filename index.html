@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Zone Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alexatiks/Leaflet.SmoothWheelZoom/Leaflet.SmoothWheelZoom.min.js"></script>
+    <script src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <script async src="https://docs.opencv.org/4.5.3/opencv.js"></script>
+</head>
+<body>
+    <input type="file" id="upload" accept="image/*">
+    <img id="mapImage" style="display:none;">
+    <div id="map" style="height: 500px;width: 500px;"></div>
+    Zone Number: <input type="text" id="zonenum"><br>
+    <h1>DISCLAIMER: it will not detect zones that are 5th or later unless you get lucky and it will!</h1>
+    <canvas id="canvasOutput"></canvas>
+    <script src="ai.js"></script>
+    <script src="map.js"></script>
+</body>
+</html>
