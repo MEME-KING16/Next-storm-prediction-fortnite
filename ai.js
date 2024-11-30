@@ -57,7 +57,6 @@ async function trainModel() {
     await model.fit(xs, ys, {
         epochs: 7000
     });
-    model.save("downloads://")
     console.log('Training complete');
 }
 
