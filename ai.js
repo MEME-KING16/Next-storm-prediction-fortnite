@@ -1,42 +1,24 @@
-// Create a simple model in TensorFlow.js
 const createModel = () => {
     const model = tf.sequential();
 
-    // Input layer with 3 features
-    model.add(tf.layers.dense({ inputShape: [3], units: 512, activation: 'relu' }));
-    model.add(tf.layers.batchNormalization());
-
-    // Add hidden layers with regularization
-    model.add(tf.layers.dense({
-        units: 1024,
-        activation: 'swish',
-        kernelRegularizer: tf.regularizers.l2({ l2: 0.01 })
-    }));
-    model.add(tf.layers.dropout({ rate: 0.2 }));
-
-    model.add(tf.layers.dense({ units: 512, activation: 'relu' }));
-    model.add(tf.layers.batchNormalization());
-
-    // Output layer with 3 outputs: x, y, and r
+    // Input layer
+    model.add(tf.layers.dense({ inputShape: [3], units: 32, activation: 'relu' }));
+    
+    // Hidden layers
+    model.add(tf.layers.dense({ units: 64, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 32, activation: 'relu' }));
+    
+    // Output layer
     model.add(tf.layers.dense({ units: 3 }));
 
-    // Compile the model with a custom loss function
-    const customLoss = (yTrue, yPred) => {
-        const weights = tf.tensor([1.0, 1.0, 0.5]); // Emphasize x and y
-        return tf.losses.meanSquaredError(yTrue.mul(weights), yPred.mul(weights));
-    };
-
+    // Compile the model
     model.compile({
         optimizer: 'adam',
-        loss: customLoss,
-        metrics: ['mae']
+        loss: 'meanSquaredError'
     });
 
     return model;
 };
-
-
-
 const model = createModel();
 
 
@@ -52,11 +34,20 @@ y.push([211.5, 327.5, 157.39999389648438],[177.5, 319.5, 116.4000015258789], [17
 const xs = tf.tensor2d(x);
 const ys = tf.tensor2d(y);
 
+let loass = []
 // Train the model
 async function trainModel() {
     await model.fit(xs, ys, {
-        epochs: 7000
+        epochs: 2000, // Start with 500 epochs
+        validationSplit: 0.2, // Helps with evaluation
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                loass.push(logs.loss)
+                console.log(`Epoch: ${epoch}, Loss: ${logs.loss}`);
+            }
+        }
     });
+    document.getElementById("upload").disabled = false
     console.log('Training complete');
 }
 
