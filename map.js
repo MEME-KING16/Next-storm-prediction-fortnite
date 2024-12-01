@@ -1,5 +1,5 @@
 // Initialize the Leaflet map
-const map = L.map("map", {
+let map = L.map("map", {
     crs: L.CRS.Simple,
     minZoom: -1,
     maxZoom: 3,
@@ -9,6 +9,7 @@ const map = L.map("map", {
     zoomControl: false,
     attributionControl: false
 });
+const circleLayerGroup = L.layerGroup().addTo(map);
 
 // Set default bounds for the map
 let bounds = [
@@ -110,7 +111,7 @@ function detectZone(image) {
             color: 'white',
             weight: 2,
             fillOpacity: 0.1
-        }).addTo(map);
+        }).addTo(circleLayerGroup);
 
         // Ensure the TensorFlow model is loaded before making predictions
         if (typeof model !== 'undefined') {
@@ -127,7 +128,7 @@ function detectZone(image) {
                 color: 'purple',
                 weight: 2,
                 fillOpacity: 0.1
-            }).addTo(map);
+            }).addTo(circleLayerGroup);
             let zonenum = Number(document.getElementById("zonenum").value)
             for (let index = 0; index < 11-zonenum; index++) {
                 const inp = tf.tensor2d([[zonepredx,zonepredy,zonepredr]]);
@@ -140,7 +141,7 @@ function detectZone(image) {
                 color: 'purple',
                 weight: 2,
                 fillOpacity: 0.1
-            }).addTo(map);
+            }).addTo(circleLayerGroup);
              zonepredx = outData[0]
              zonepredy = outData[1]
              zonepredr = outData[2]
